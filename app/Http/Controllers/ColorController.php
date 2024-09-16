@@ -14,6 +14,10 @@ class ColorController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+    
+
+
     public function index()
     {
         $data = Color::All();
@@ -54,7 +58,12 @@ class ColorController extends Controller
      */
     public function show($id)
     {
-        //
+        $color = Color::find($id);
+
+        if(isset($color)){
+            return view('color.show', compact ('color'));
+        }
+        return "<h1>ERRO - COR NAO ENCONTRADA</h1>";
     }
 
     /**
@@ -65,7 +74,12 @@ class ColorController extends Controller
      */
     public function edit($id)
     {
-        //
+        $color = Color::find($id);
+
+        if(isset($color)){
+            return view('color.edit', compact('color'));
+        }
+        return "<h1>ERRO - COR NAO ENCONTRADA</h1>";
     }
 
     /**
@@ -77,7 +91,14 @@ class ColorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $color = Color::find($id);
+
+        if(isset($color)){
+            $color->name = $request->name;
+            $color->save();
+            return redirect()->route('color.index');
+        }
+        return "<h1>ERRO - COR NAO ENCONTRADA</h1>";
     }
 
     /**
@@ -88,6 +109,10 @@ class ColorController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        $color = Color::find($id);
+        if(isset($color)){
+            $color->delete();
+            return  redirect()->route('color.index');
+        }
+ }
 }

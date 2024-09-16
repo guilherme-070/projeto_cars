@@ -8,7 +8,7 @@
     <input type="text" name="name"  class="form-control"/>
 
     <input type="submit" value="Salvar" class="btn btn-success mt-1">
-    
+
 </form>
 
 @endsection
