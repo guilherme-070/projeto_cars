@@ -65,7 +65,12 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        //
+        $modelo = Modelo::find($id);
+
+        if(isset($modelo)){
+            return view('modelo.show', compact('modelo'));
+        }
+        return "<h1>ERRO - EIXO NAO ENCONTRADO</h1>";
     }
 
     /**
@@ -76,7 +81,12 @@ class ModeloController extends Controller
      */
     public function edit($id)
     {
-        //
+        $modelo = Modelo::find($id);
+        $marcas = Marca::orderBy('name')->get();
+
+        if(isset($modelo)){
+            return view('modelo.edit', compact (['modelo', 'marcas']));
+        }
     }
 
     /**
@@ -88,7 +98,18 @@ class ModeloController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $modelo =Modelo::find($id);
+        $marca = Marca::find($request->marca);
+
+        if(isset($marca) && isset($modelo)){
+           $modelo->name = mb_strtoupper($request->name, 'UTF-8');
+           $modelo->marca()->associate($marca);
+           $modelo->save();
+
+           return redirect()->route('modelo.index');
+        }
+
+        return "<h1>ERRO - MODELO NAO ENCONTRADO</h1>";
     }
 
     /**
@@ -99,6 +120,12 @@ class ModeloController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $modelo = Modelo::find($id);
+        if(isset($modelo)){
+            $modelo->delete();
+            return redirect()->route('modelo.index');
+        }
+
+        return "<h1>ERRO - MODELO NAO ENCONTRADO</h1>";
     }
 }

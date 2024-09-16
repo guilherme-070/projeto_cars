@@ -53,7 +53,12 @@ class MarcaController extends Controller
      */
     public function show($id)
     {
-        //
+        $marca = Marca::find($id);
+
+        if(isset($marca)){
+            return view('marca.show', compact ('marca'));
+        }
+        return "<h1>ERRO - MARCA NAO ENCONTRADA</h1>";
     }
 
     /**
@@ -64,7 +69,12 @@ class MarcaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $marca = Marca::find($id);
+
+        if(isset($marca)){
+            return view('marca.edit', compact('marca'));
+        }
+        return "<h1>ERRO - COR NAO ENCONTRADA</h1>";
     }
 
     /**
@@ -76,7 +86,14 @@ class MarcaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $marca = Marca::find($id);
+
+        if(isset($marca)){
+            $marca->name = $request->name;
+            $marca->save();
+            return redirect()->route('marca.index');
+        }
+        return "<h1>ERRO - MARCA NAO ENCONTRADA</h1>";
     }
 
     /**
@@ -87,6 +104,10 @@ class MarcaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $marca = Marca::find($id);
+        if(isset($marca)){
+            $marca->delete();
+            return  redirect()->route('marca.index');
+    }
     }
 }

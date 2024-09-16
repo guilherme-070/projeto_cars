@@ -52,7 +52,7 @@ class CarroController extends Controller
             'modelo' => 'required|exists:modelos,id',
             'color' => 'required|exists:colors,id',
             'estado' => 'required|exists:estados,id',
-            'placa' => 'required|string|max:10'
+            'placa' => 'required|string|max:8|min:8'
         ]);
 
 
@@ -91,7 +91,12 @@ class CarroController extends Controller
      */
     public function show($id)
     {
-        //
+        $carro = Carro::find($id);
+
+        if(isset($carro)){
+            return view('carro.show', compact('carro'));
+        }
+        return "<h1>ERRO - CARRO NAO ENCONTRADO</h1>";
     }
 
     /**
@@ -102,7 +107,15 @@ class CarroController extends Controller
      */
     public function edit($id)
     {
-        //
+        $carro = Carro::find($id);
+        $placa = Carro::find($id);
+        $modelo = Modelo::orderBy('name')->get();
+        $color = Color::orderBy('name')->get();
+        $estado = Estado::orderBy('name')->get();
+
+        if(isset($carro)){
+            return view('carro.edit', compact (['carro', 'placa', 'modelo', 'color', 'estado']));
+        }
     }
 
     /**
@@ -114,7 +127,37 @@ class CarroController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $carro = Carro::find($id);
+        $modelo = Modelo::find($request->modelo);
+        $estado = Estado::find($request->$id);
+        $color = Color::find($request->$id);
+
+        if(isset($carro) && isset($modelo) && isset($estado) && isset($color)){
+
+            $carro->placa = mb_strtoupper($request->placa, 'UTF-8');
+            // Associa os objetos encontrados ao carro
+            $carro->modelos()->associate($modelo);
+            $carro->estados()->associate($estado);
+            $carro->colors()->associate($color);
+
+           return redirect()->route('carro.index');
+        }
+
+        return "<h1>ERRO - CARRO NAO ENCONTRADO</h1>";
+
+
+        /*$modelo =Modelo::find($id);
+        $marca = Marca::find($request->marca);
+
+        if(isset($marca) && isset($modelo)){
+           $modelo->name = mb_strtoupper($request->name, 'UTF-8');
+           $modelo->marca()->associate($marca);
+           $modelo->save();
+
+           return redirect()->route('modelo.index');
+        }
+
+        return "<h1>ERRO - MODELO NAO ENCONTRADO</h1>";*/
     }
 
     /**
