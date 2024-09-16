@@ -26,4 +26,4 @@ Route::resource('/marca','App\Http\Controllers\MarcaController');
 Route::resource('/modelo','App\Http\Controllers\ModeloController');
 
 // DESATIVE O COMENTARIO PARA LIGAR A ROTA
-// Route::resource('/carro','App\Http\Controllers\CarroController');
+Route::resource('/carro','App\Http\Controllers\CarroController');

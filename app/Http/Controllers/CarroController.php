@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Carro;
 use App\Models\Modelo;
 use App\Models\Marca;
 use App\Models\Estado;
+use App\Models\Color;
 
 use Illuminate\Http\Request;
 
@@ -18,7 +19,9 @@ class CarroController extends Controller
      */
     public function index()
     {
-       //FAZER A INDEX: OLHAR O NOSSO CODIGO DA AULA E PERGUNTAR AO KAYC SE QUISER
+        $data = Carro::with(['modelos', 'colors', 'estados'])->get();
+
+        return view('carro.index', compact(['data']));
     }
 
     /**
@@ -28,7 +31,12 @@ class CarroController extends Controller
      */
     public function create()
     {
-       //FAZER A CREATE: OLHAR AS CONTROLLERS ANTERIORES COMO INSPIRAÇÃO
+        $modelos = Modelo::orderBy('name')->get();
+        $colors = Color::orderBy('name')->get();
+        $estados = Estado::orderBy('name')->get();
+
+
+        return view('carro.create', compact(['modelos', 'colors', 'estados']));
     }
 
     /**
@@ -39,7 +47,40 @@ class CarroController extends Controller
      */
     public function store(Request $request)
     {
-       //OLHAR A LOGICA PARA FAZER A STORE: OLHAR O CODIGO DA AULA + CONTROLLERS ANTERIORES
+
+        $request->validate([
+            'modelo' => 'required|exists:modelos,id',
+            'color' => 'required|exists:colors,id',
+            'estado' => 'required|exists:estados,id',
+            'placa' => 'required|string|max:10'
+        ]);
+
+
+        $modelo = Modelo::find($request->modelo);
+        $color = Color::find($request->color);
+        $estado = Estado::find($request->estado);
+
+
+
+        if ($modelo && $color && $estado) {
+            // Cria uma nova instância do modelo Carro
+            $carro = new Carro();
+            $carro->placa = mb_strtoupper($request->placa, 'UTF-8');
+    
+            // Associa os objetos encontrados ao carro
+            $carro->modelos()->associate($modelo);
+            $carro->estados()->associate($estado);
+            $carro->colors()->associate($color);
+            
+    
+            // Salva o carro no banco de dados
+            $carro->save();
+    
+            // Redireciona para a página de listagem de carros
+            return redirect()->route('carro.index');
+        }
+
+        
     }
 
     /**

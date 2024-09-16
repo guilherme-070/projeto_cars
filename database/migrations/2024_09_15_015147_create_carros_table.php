@@ -23,8 +23,8 @@ class CreateCarrosTable extends Migration
             $table->unsignedBigInteger('estados_id');
             $table->foreign('estados_id')->references('id')->on('estados');
 
-            $table->unsignedBigInteger('color_id');
-            $table->foreign('color_id')->references('id')->on('colors');
+            $table->unsignedBigInteger('colors_id');
+            $table->foreign('colors_id')->references('id')->on('colors');
 
             $table->timestamps();
         });

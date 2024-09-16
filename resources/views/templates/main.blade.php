@@ -27,7 +27,7 @@
         <a class="nav-link " aria-current="page" href="{{route('color.index')}}">COR</a>
         <a class="nav-link" href="{{route('marca.index')}}">MARCA</a>
         <a class="nav-link" href="{{route('modelo.index')}}">MODELO</a>
-        <a class="nav-link" href="">CARROS</a> 
+        <a class="nav-link" href="{{route('carro.index')}} ">CARROS</a> 
         {{--COLOQUE O:   {{route('carro.index')}}    NO HREF PARA FAZER A ROTA--}}
 
       </div>
