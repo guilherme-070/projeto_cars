@@ -66,21 +66,21 @@ class CarroController extends Controller
             // Cria uma nova instância do modelo Carro
             $carro = new Carro();
             $carro->placa = mb_strtoupper($request->placa, 'UTF-8');
-    
+
             // Associa os objetos encontrados ao carro
             $carro->modelos()->associate($modelo);
             $carro->estados()->associate($estado);
             $carro->colors()->associate($color);
-            
-    
+
+
             // Salva o carro no banco de dados
             $carro->save();
-    
+
             // Redireciona para a página de listagem de carros
             return redirect()->route('carro.index');
         }
 
-        
+
     }
 
     /**
@@ -108,13 +108,12 @@ class CarroController extends Controller
     public function edit($id)
     {
         $carro = Carro::find($id);
-        $placa = Carro::find($id);
         $modelo = Modelo::orderBy('name')->get();
         $color = Color::orderBy('name')->get();
         $estado = Estado::orderBy('name')->get();
 
         if(isset($carro)){
-            return view('carro.edit', compact (['carro', 'placa', 'modelo', 'color', 'estado']));
+            return view('carro.edit', compact (['carro', 'modelo', 'color', 'estado']));
         }
     }
 
@@ -130,7 +129,7 @@ class CarroController extends Controller
         $carro = Carro::find($id);
         $modelo = Modelo::find($request->modelo);
         $estado = Estado::find($request->$id);
-        $color = Color::find($request->$id);
+        $color = Color::find($request->$color);
 
         if(isset($carro) && isset($modelo) && isset($estado) && isset($color)){
 

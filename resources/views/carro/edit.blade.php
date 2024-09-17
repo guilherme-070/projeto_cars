@@ -9,14 +9,13 @@
     @method('PUT')
 
     <label class="mt-3">Placa</label>
-    <input type="text" name="placa" class="form-control" value="{{$placa->carro->name}}"/>
+    <input type="text" name="placa" class="form-control" value="{{$carro->placa}}"/>
 
-
-    <label class="mt-3">Marca</label>
-    <select name="marca" class="form-control">
+    <label class="mt-3">Modelo</label>
+    <select name="modelo" class="form-control">
         <option selected disabled></option>
 
-    @foreach ($carro as $item)
+    @foreach ($modelo as $item)
         @if($item->id == $carro->modelo_id)
         <option value="{{$item->id}}" selected> {{$item->name}}</option>
         @else
@@ -24,6 +23,38 @@
         @endif
     @endforeach
     </select>
+
+
+    <label class="mt-3">Cor</label>
+    <select name="color" class="form-control">
+        <option selected disabled></option>
+
+    @foreach ($color as $item)
+        @if($item->id == $carro->color_id)
+        <option value="{{$item->id}}" selected> {{$item->name}}</option>
+        @else
+        <option value="{{$item->id}}">{{$item->name}}</option>
+        @endif
+    @endforeach
+    </select>
+
+
+    <label class="mt-3">Estado</label>
+    <select name="estado" class="form-control">
+        <option selected disabled></option>
+
+    @foreach ($estado as $item)
+        @if($item->id == $carro->estado_id)
+        <option value="{{$item->id}}" selected> {{$item->name}}</option>
+        @else
+        <option value="{{$item->id}}">{{$item->name}}</option>
+        @endif
+    @endforeach
+    </select>
+
+
+
+
 
 
 <input type="submit" value="Alterar" class="btn btn-success mt-1">
