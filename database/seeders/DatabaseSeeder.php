@@ -11,9 +11,12 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    
+
     public function run()
     {
         $this->call(StatesSeeder::class);
+        $this->call(MarcaSeeder::class);
+        $this->call(ModeloSeeder::class);
+        $this->call(ColorSeeder::class);
     }
 }

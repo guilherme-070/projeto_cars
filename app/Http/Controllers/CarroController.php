@@ -7,11 +7,20 @@ use App\Models\Modelo;
 use App\Models\Marca;
 use App\Models\Estado;
 use App\Models\Color;
+use Dompdf\Dompdf;
 
 use Illuminate\Http\Request;
 
 class CarroController extends Controller
 {
+
+    private $rules = [
+        "placa"=>"required|min:8|max:8|unique:carro",
+    ];
+
+    private $messages =[
+        "required" => "O campo [:attribute] é obrigatório"
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -48,12 +57,7 @@ class CarroController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-            'modelo' => 'required|exists:modelos,id',
-            'color' => 'required|exists:colors,id',
-            'estado' => 'required|exists:estados,id',
-            'placa' => 'required|string|max:8|min:8'
-        ]);
+        //$request->validate($this->rules, $this->messages);
 
 
         $modelo = Modelo::find($request->modelo);
@@ -62,7 +66,7 @@ class CarroController extends Controller
 
 
 
-        if ($modelo && $color && $estado) {
+
             // Cria uma nova instância do modelo Carro
             $carro = new Carro();
             $carro->placa = mb_strtoupper($request->placa, 'UTF-8');
@@ -72,13 +76,12 @@ class CarroController extends Controller
             $carro->estados()->associate($estado);
             $carro->colors()->associate($color);
 
-
             // Salva o carro no banco de dados
             $carro->save();
 
             // Redireciona para a página de listagem de carros
             return redirect()->route('carro.index');
-        }
+
 
 
     }
@@ -128,16 +131,16 @@ class CarroController extends Controller
     {
         $carro = Carro::find($id);
         $modelo = Modelo::find($request->modelo);
-        $estado = Estado::find($request->$id);
-        $color = Color::find($request->$color);
+        $estado = Estado::find($request->estado);
+        $color = Color::find($request->color);
 
         if(isset($carro) && isset($modelo) && isset($estado) && isset($color)){
 
             $carro->placa = mb_strtoupper($request->placa, 'UTF-8');
-            // Associa os objetos encontrados ao carro
             $carro->modelos()->associate($modelo);
             $carro->estados()->associate($estado);
             $carro->colors()->associate($color);
+            $carro->save();
 
            return redirect()->route('carro.index');
         }
@@ -167,6 +170,29 @@ class CarroController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $carro = Carro::find($id);
+        if(isset($carro)){
+            $carro->delete();
+            return redirect()->route('carro.index');
+
+        }
+
+        return "<h1>ERRO - CARRO NAO ENCONTRADO</h1>";
+    }
+
+
+
+
+    public function report(){
+
+        $carros = Carro::with(['modelos', 'colors', 'estados'])->get();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml(view('carro.report',compact('carros')));
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $dompdf->stream("relatorio-de-carros.pdf", array("Attachment" => false));
+
+
     }
 }

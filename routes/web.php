@@ -13,17 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    
+/*Route::get('/', function () {
     return view('home');
-
-})->name('home');
-
-
-Route::resource('/color','App\Http\Controllers\ColorController');
-Route::resource('/marca','App\Http\Controllers\MarcaController');
+})->name('home')->middleware(['auth']);*/
 
 Route::resource('/modelo','App\Http\Controllers\ModeloController');
-
-// DESATIVE O COMENTARIO PARA LIGAR A ROTA
+Route::resource('/marca','App\Http\Controllers\MarcaController');
+Route::resource('/color','App\Http\Controllers\ColorController');
 Route::resource('/carro','App\Http\Controllers\CarroController');
+Route::get('/report/carro', 'App\Http\Controllers\CarroController@report')->name('carro.report');
+Route::get('/', 'App\Http\Controllers\HomeController@graph')->name('home');
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

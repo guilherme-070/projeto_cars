@@ -16,7 +16,7 @@
         <option selected disabled></option>
 
     @foreach ($modelo as $item)
-        @if($item->id == $carro->modelo_id)
+        @if($item->id == $carro->modelos_id)
         <option value="{{$item->id}}" selected> {{$item->name}}</option>
         @else
         <option value="{{$item->id}}">{{$item->name}}</option>
@@ -30,7 +30,7 @@
         <option selected disabled></option>
 
     @foreach ($color as $item)
-        @if($item->id == $carro->color_id)
+        @if($item->id == $carro->colors_id)
         <option value="{{$item->id}}" selected> {{$item->name}}</option>
         @else
         <option value="{{$item->id}}">{{$item->name}}</option>
@@ -44,7 +44,7 @@
         <option selected disabled></option>
 
     @foreach ($estado as $item)
-        @if($item->id == $carro->estado_id)
+        @if($item->id == $carro->estados_id)
         <option value="{{$item->id}}" selected> {{$item->name}}</option>
         @else
         <option value="{{$item->id}}">{{$item->name}}</option>

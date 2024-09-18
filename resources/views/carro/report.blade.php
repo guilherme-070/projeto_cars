@@ -13,7 +13,7 @@
         <h4>Cor: {{$carro->colors->name}}</h4>
         <h4>Estado: {{$carro->estados->name }}</h4>
         <hr>
-    @endforeach
+@endforeach
 
 
 
